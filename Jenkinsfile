@@ -2,22 +2,28 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
+        stage('Welcome') {
             steps {
-                // Yahan humne branch 'main' specify kar di hai
-                git branch: 'main', url: 'https://github.com/piyush410/my-jenkins-test.git'
+                echo "Build Number: ${env.BUILD_NUMBER}"
+                echo "Chalo, kaam shuru karte hain!"
             }
         }
         stage('Check Files') {
             steps {
                 sh 'ls -l'
-                sh 'cat README.md'
             }
         }
-        stage('Finished') {
-            steps {
-                echo 'Pipeline successfully executed from GitHub!'
-            }
+    }
+
+    post {
+        always {
+            echo 'Main har haal mein chalunga (Always)!'
+        }
+        success {
+            echo 'Mubarak ho! Pipeline pass ho gayi.'
+        }
+        failure {
+            echo 'Afsoos! Kuch toh gadbad hai.'
         }
     }
 }

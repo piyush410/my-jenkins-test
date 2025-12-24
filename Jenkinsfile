@@ -17,10 +17,13 @@ pipeline {
 
         stage('Run Container') {
             steps {
-                // Purane container ko delete karein agar chal raha ho, phir naya chalayein
-                sh 'docker rm -f piyush-container || true'
-                sh 'docker run -d --name piyush-container -p 8081:80 my-web-app'
-                echo 'Website is running on port 8081'
+        // Purane container ko hatayein taaki naya wala 8888 par chal sake
+        sh 'docker rm -f piyush-container || true'
+        
+        // Port mapping badal kar 8888:80 kar di
+        sh 'docker run -d --name piyush-container -p 8888:80 my-web-app'
+        
+        echo 'Website ab port 8888 par chal rahi hai!'
             }
         }
     }

@@ -23,11 +23,14 @@ pipeline {
         stage('Login & Push to Docker Hub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-login', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                    // Humne yahan login command ko badal diya hai taaki wo error na de
+                    // Purani 'echo **** | docker login' wali line ko delete karke ye likhein
                     sh "docker login -u ${USER} -p ${PASS}"
+                    
+                    // Iske baad push wali command
                     sh "docker push ${USER}/my-web-app:latest"
                 }
             }
+        }
         }
         }
 

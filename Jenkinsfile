@@ -13,6 +13,11 @@ pipeline {
                 sh 'ls -l'
             }
         }
+        stage('Docker Check') {
+            steps {
+                sh 'docker --version'
+            }
+        }
     }
 
     post {

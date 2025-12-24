@@ -4,7 +4,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/piyush410/my-jenkins-test.git'
+                // Yahan humne branch 'main' specify kar di hai
+                git branch: 'main', url: 'https://github.com/piyush410/my-jenkins-test.git'
             }
         }
         stage('Check Files') {

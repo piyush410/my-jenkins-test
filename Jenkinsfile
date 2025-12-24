@@ -1,34 +1,37 @@
 pipeline {
-    agent any
+    agent any 
 
     stages {
-        stage('Welcome') {
+        stage('Checkout') {
             steps {
-                echo "Build Number: ${env.BUILD_NUMBER}"
-                echo "Chalo, kaam shuru karte hain!"
+                // Ye aapka purana step hai jo code lata hai
+                git branch: 'main', url: 'https://github.com/piyush410/my-jenkins-test.git'
             }
         }
+        
         stage('Check Files') {
             steps {
+                // Ye bhi purana hai, list dekhne ke liye
                 sh 'ls -l'
             }
         }
-        stage('Docker Check') {
+
+        stage('Docker Test') {
             steps {
-                sh 'docker --version'
+                // Ye naya step hai Docker check karne ke liye
+                echo 'Checking if Docker is ready...'
+                sh 'docker version'
+                sh 'docker run hello-world'
             }
         }
     }
 
     post {
-        always {
-            echo 'Main har haal mein chalunga (Always)!'
-        }
         success {
-            echo 'Mubarak ho! Pipeline pass ho gayi.'
+            echo 'Sab kuch sahi chal raha hai!'
         }
         failure {
-            echo 'Afsoos! Kuch toh gadbad hai.'
+            echo 'Oops! Docker ya permissions mein kuch gadbad hai.'
         }
     }
 }

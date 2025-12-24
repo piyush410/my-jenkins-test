@@ -22,12 +22,13 @@ pipeline {
 
         stage('Login & Push to Docker Hub') {
             steps {
-                // Jenkins credentials ka use karke login aur push
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-login', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                    sh "echo ${PASS} | docker login -u ${USER} --password-stdin"
-                    sh "docker push ${DOCKER_HUB_USER}/my-web-app:latest"
+                    // Humne yahan login command ko badal diya hai taaki wo error na de
+                    sh "docker login -u ${USER} -p ${PASS}"
+                    sh "docker push ${USER}/my-web-app:latest"
                 }
             }
+        }
         }
 
         stage('Deploy Locally') {

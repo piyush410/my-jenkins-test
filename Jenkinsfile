@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         // Yahan apna Docker Hub username likhein
-        DOCKER_HUB_USER = 'YOUR_DOCKERHUB_USERNAME'
+        DOCKER_HUB_USER = 'piyush410'
     }
 
     stages {

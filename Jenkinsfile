@@ -4,34 +4,24 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Ye aapka purana step hai jo code lata hai
                 git branch: 'main', url: 'https://github.com/piyush410/my-jenkins-test.git'
             }
         }
         
-        stage('Check Files') {
+        stage('Build Docker Image') {
             steps {
-                // Ye bhi purana hai, list dekhne ke liye
-                sh 'ls -l'
+                // 'my-web-app' naam ki image banayein
+                sh 'docker build -t my-web-app .'
             }
         }
 
-        stage('Docker Test') {
+        stage('Run Container') {
             steps {
-                // Ye naya step hai Docker check karne ke liye
-                echo 'Checking if Docker is ready...'
-                sh 'docker version'
-                sh 'docker run hello-world'
+                // Purane container ko delete karein agar chal raha ho, phir naya chalayein
+                sh 'docker rm -f piyush-container || true'
+                sh 'docker run -d --name piyush-container -p 8081:80 my-web-app'
+                echo 'Website is running on port 8081'
             }
-        }
-    }
-
-    post {
-        success {
-            echo 'Sab kuch sahi chal raha hai!'
-        }
-        failure {
-            echo 'Oops! Docker ya permissions mein kuch gadbad hai.'
         }
     }
 }

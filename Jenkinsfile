@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         // Yahan apna Docker Hub username likhein
-        DOCKER_HUB_USER = 'apna-username-yahan-likho'
+        DOCKER_HUB_USER = 'YOUR_DOCKERHUB_USERNAME'
     }
 
     stages {
@@ -13,16 +13,16 @@ pipeline {
             }
         }
 
-        stage('Build & Tag') {
+        stage('Build Image') {
             steps {
-                // Image ka naam aapke username ke saath hona chahiye
+                // Image build karna
                 sh "docker build -t ${DOCKER_HUB_USER}/my-web-app:latest ."
             }
         }
 
-        stage('Login & Push') {
+        stage('Login & Push to Docker Hub') {
             steps {
-                // Jenkins ke credentials use karke login aur push karein
+                // Jenkins credentials ka use karke login aur push
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-login', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                     sh "echo ${PASS} | docker login -u ${USER} --password-stdin"
                     sh "docker push ${DOCKER_HUB_USER}/my-web-app:latest"
@@ -30,10 +30,12 @@ pipeline {
             }
         }
 
-        stage('Run Locally') {
+        stage('Deploy Locally') {
             steps {
+                // Port 8888 par purana container hata kar naya chalana
                 sh 'docker rm -f piyush-container || true'
                 sh "docker run -d --name piyush-container -p 8888:80 ${DOCKER_HUB_USER}/my-web-app:latest"
+                echo "Website is live at http://your-ip:8888"
             }
         }
     }
